@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  creationTimestamp: null
+  labels:
+    name: ui
+  name: proxy
+subsets:
+- addresses:
+  - ip: 192.168.1.73
+    targetRef:
+      kind: Pod
+      name: proxy-u01mm
+      namespace: harbor
+      resourceVersion: "68503"
+      uid: cbe738d0-9ba7-11e6-908c-00163e03ca93
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+  - name: https
+    port: 443
+    protocol: TCP

@@ -1,0 +1,158 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: gitalb
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: gitlab
+      namespace: gitlab
+      resourceVersion: "15503"
+      uid: b57e69dd-9ac0-11e6-855c-00163e2e3f40
+    nfs:
+      path: /gitlab
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: harbor
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: harbor
+      namespace: harbor
+      resourceVersion: "39753"
+      uid: 053417e5-9b38-11e6-855c-00163e2e3f40
+    nfs:
+      path: /harbor-test
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: harbor-mysql
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: harbor-mysql
+      namespace: harbor
+      resourceVersion: "64576"
+      uid: 1945de1e-9b9a-11e6-a6c4-00163e03c7ae
+    nfs:
+      path: /harbor-mysql
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: harbor-registry
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: harbor-registry
+      namespace: harbor
+      resourceVersion: "557983"
+      uid: 0a87c309-a407-11e6-9f7d-00163e2e3f40
+    nfs:
+      path: /harbor-registry
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: ldap
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 3Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: ldap
+      namespace: default
+      resourceVersion: "4617"
+      uid: aed82071-9a93-11e6-8be4-00163e2e3f40
+    nfs:
+      path: /ldap
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: registry
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: registry
+      namespace: default
+      resourceVersion: "42974"
+      uid: 3647b43c-9b46-11e6-b888-00163e03c7ae
+    nfs:
+      path: /registry
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    creationTimestamp: null
+    name: ui-config
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: ui-config
+      namespace: harbor
+      resourceVersion: "558036"
+      uid: 46f3b04d-a407-11e6-9f7d-00163e2e3f40
+    nfs:
+      path: /ui-config
+      server: 10.76.3.12
+    persistentVolumeReclaimPolicy: Recycle
+  status: {}
+kind: List
+metadata: {}

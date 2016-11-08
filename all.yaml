@@ -1,0 +1,209 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      name: mysql
+    name: mysql
+  spec:
+    replicas: 1
+    selector:
+      name: mysql
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: root123
+          image: caicloud/harbor_deploy_mysql:latest
+          imagePullPolicy: Always
+          name: mysql
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: mysql-storage
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          node: node-3.11
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: harbor-mysql
+  status:
+    replicas: 0
+
+---
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      name: proxy
+    name: proxy
+  spec:
+    replicas: 1
+    selector:
+      name: proxy
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: proxy
+      spec:
+        containers:
+        - image: registry.dataos.io/liuliu/harbor_proxy:latest
+          imagePullPolicy: Always
+          name: proxy
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          node: node-3.11
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    replicas: 0
+
+---
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      name: registry
+    name: registry
+  spec:
+    replicas: 1
+    selector:
+      name: registry
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: registry
+      spec:
+        containers:
+        - image: caicloud/harbor_registry:2.3.0
+          imagePullPolicy: Always
+          name: registry
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          - containerPort: 5001
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /storage
+            name: storage
+          - mountPath: /etc/registry
+            name: registry-config
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          node: node-3.11
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: harbor-registry
+        - name: registry-config
+          secret:
+            secretName: portus-config
+  status:
+    replicas: 0
+---
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      name: ui
+    name: ui
+  spec:
+    replicas: 1
+    selector:
+      name: ui
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: ui
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_HOST
+            value: mysql
+          - name: MYSQL_PORT
+            value: "3306"
+          - name: MYSQL_USR
+            value: root
+          - name: REGISTRY_URL
+            value: http://registry:5000
+          - name: CONFIG_PATH
+            value: /etc/ui/app.conf
+          - name: HARBOR_REG_URL
+            value: localhost
+          - name: HARBOR_ADMIN_PASSWORD
+            value: 99B0-6599E123D24E
+          - name: HARBOR_URL
+            value: http://localhost
+          - name: AUTH_MODE
+            value: ldap_auth
+          - name: LDAP_URL
+            value: ldap://193.169.0.132:389
+          - name: LDAP_BASE_DN
+            value: cn=%s,ou=Users,dc=openstack,dc=org
+          - name: LOG_LEVEL
+            value: debug
+          - name: MYSQL_PWD
+            value: root123
+          image: registry.dataos.io/liuliu/harbor:latest
+          imagePullPolicy: Always
+          name: ui
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /etc/ui
+            name: storage
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          node: node-3.11
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: ui-config
+  status:
+    replicas: 0
+kind: List
+metadata: {}
