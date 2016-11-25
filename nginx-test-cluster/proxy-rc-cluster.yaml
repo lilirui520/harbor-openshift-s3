@@ -4,24 +4,23 @@ metadata:
   creationTimestamp: null
   generation: 1
   labels:
-    name: proxy1
-  name: proxy1
+    name: proxy
+  name: proxy
 spec:
   replicas: 1
   selector:
-    name: proxy1
+    name: proxy
   template:
     metadata:
       creationTimestamp: null
       labels:
-        name: proxy1
-        app: cluster
+        name: proxy
     spec:
       containers:
 #      - image: caicloud/harbor_proxy:latest
       - image: registry.dataos.io/liuliu/harbor_proxy:latest 
         imagePullPolicy: Always
-        name: proxy1
+        name: proxy
         ports:
         - containerPort: 80
           protocol: TCP
@@ -41,7 +40,7 @@ spec:
       volumes:
       - name: nginx-config
         secret:
-          secretName: nginx-config
+          secretName: nginx-new-config
   triggers:
   - type: ConfigChange
 status:

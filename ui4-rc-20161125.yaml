@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  creationTimestamp: null
+  generation: 1
+  labels:
+    name: ui4
+  name: ui4
+spec:
+  replicas: 1
+  selector:
+    name: ui4
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: ui4
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_HOST
+          value: mysql
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_USR
+          value: root
+        - name: MYSQL_PWD
+          value: root123
+        - name: REGISTRY_URL
+          value: http://registry4:5000
+        - name: CONFIG_PATH
+          value: /etc/ui/app.conf
+        - name: HARBOR_REG_URL
+          value: localhost
+        - name: HARBOR_ADMIN_PASSWORD
+          value: zhongxin-123
+        - name: HARBOR_URL
+          value: http://localhost
+        - name: AUTH_MODE
+          value: ldap_auth
+        - name: LDAP_URL
+          value: ldap://193.169.0.132:389
+        - name: LDAP_BASE_DN
+          value: cn=%s,ou=Users,dc=openstack,dc=org
+        - name: LOG_LEVEL
+          value: debug
+        image: registry.dataos.io/liuliu/harbor:latest
+        imagePullPolicy: Always
+        name: ui4
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /etc/ui
+          name: ui-config
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        node: node-3.11
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: ui-config
+        persistentVolumeClaim:
+          claimName: ui-config
+status:
+  replicas: 0

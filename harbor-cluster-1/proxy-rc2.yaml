@@ -4,24 +4,23 @@ metadata:
   creationTimestamp: null
   generation: 1
   labels:
-    name: proxy1
-  name: proxy1
+    name: proxy2
+  name: proxy2
 spec:
   replicas: 1
   selector:
-    name: proxy1
+    name: proxy2
   template:
     metadata:
       creationTimestamp: null
       labels:
-        name: proxy1
         app: cluster
+        name: proxy2
     spec:
       containers:
-#      - image: caicloud/harbor_proxy:latest
-      - image: registry.dataos.io/liuliu/harbor_proxy:latest 
+      - image: registry.dataos.io/liuliu/harbor_proxy:latest
         imagePullPolicy: Always
-        name: proxy1
+        name: proxy2
         ports:
         - containerPort: 80
           protocol: TCP
@@ -31,7 +30,7 @@ spec:
         terminationMessagePath: /dev/termination-log
         volumeMounts:
         - mountPath: /etc/nginx
-          name: nginx-config
+          name: nginx-config2
       dnsPolicy: ClusterFirst
       nodeSelector:
         node: node-3.11
@@ -39,10 +38,8 @@ spec:
       securityContext: {}
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: nginx-config
+      - name: nginx-config2
         secret:
-          secretName: nginx-config
-  triggers:
-  - type: ConfigChange
+          secretName: nginx-config2
 status:
   replicas: 0

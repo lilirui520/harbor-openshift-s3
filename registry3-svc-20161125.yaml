@@ -3,20 +3,20 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    name: ui
-  name: proxy
+    name: registry3
+  name: registry3
 spec:
   ports:
-  - name: http
-    port: 80
+  - name: port-1
+    port: 5000
     protocol: TCP
-    targetPort: 80
-  - name: https
-    port: 443
+    targetPort: 5000
+  - name: port-2
+    port: 5001
     protocol: TCP
-    targetPort: 443
+    targetPort: 5001
   selector:
-    name: proxy
+    name: registry3
   sessionAffinity: None
   type: ClusterIP
 status:

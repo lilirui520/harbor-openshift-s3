@@ -1,0 +1,36 @@
+version: 0.1
+log:
+  level: info
+  fields:
+    service: registry
+storage:
+  s3:
+    accesskey: AKIAOTLAH3GNC2A7AGVA
+    secretkey: 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
+    region: cn-north-1
+    bucket: registry-zhongxin
+    encrypt: false
+    secure: true
+    v4auth: true
+    rootdirectory: /
+
+notifications:
+  endpoints:
+    - name: "portus"
+      url: http://ui3/service/notifications 
+      headers: null
+      timeout: 5s
+      threshold: 5
+      backoff: 1s
+      disabled: false
+
+auth:
+  token:
+    issuer: registry-token-issuer
+    realm: http://harbor.10.76.3.11.xip.io/service/token
+    rootcertbundle: /etc/registry/root.crt
+    service: token-service  
+
+http:
+  addr: :5000
+  secret: 
